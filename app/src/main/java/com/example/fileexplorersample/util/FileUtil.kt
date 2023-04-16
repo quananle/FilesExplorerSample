@@ -1,6 +1,8 @@
 package com.example.fileexplorersample.util
 
 import android.os.Environment
+import android.provider.SyncStateContract.Constants
+import com.example.fileexplorersample.common.FileIdentify
 import java.io.File
 import java.util.*
 
@@ -26,17 +28,20 @@ fun getExternalPath() : String{
     return parentPath
 }
 
-fun isImageFile(file: File): Boolean {
-    val fileFilterImg = arrayOf(
-        "jpg",
-        "png",
-        "gif",
-        "jpeg"
-    )
-    for (filter in fileFilterImg) {
-        if (file.absolutePath.trim().endsWith(file.name))
-            return true
-        }
-    return false
+fun File.isPhoto(): Boolean = FileIdentify.photoExtensions.any {
+    this.absolutePath.trim().endsWith(it)
 }
+
+fun File.isMedia(): Boolean = isVideo() || isAudio()
+
+fun File.isVideo(): Boolean =  FileIdentify.videoExtensions.any {
+    this.absolutePath.trim().endsWith(it)
+}
+
+fun File.isAudio(): Boolean = FileIdentify.audioExtensions.any {
+    this.absolutePath.trim().endsWith(it)
+}
+
+fun File.isAPK(): Boolean = this.absolutePath.trim().endsWith(".apk")
+
 

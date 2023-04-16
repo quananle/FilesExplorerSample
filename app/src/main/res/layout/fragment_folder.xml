@@ -10,64 +10,19 @@
         tools:ignore="ContentDescription" >
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_arrow_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/tv_folder_name"
-            app:layout_constraintBottom_toBottomOf="@id/tv_folder_name"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <ImageView
-            android:id="@+id/iv_option"
-            android:layout_marginHorizontal="12dp"
-            android:src="@drawable/ic_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/iv_search"
-            app:layout_constraintBottom_toBottomOf="@id/iv_search"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <ImageView
-            android:id="@+id/iv_search"
-            android:src="@drawable/ic_search"
-            android:layout_marginEnd="12dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/tv_folder_name"
-            app:layout_constraintBottom_toBottomOf="@id/tv_folder_name"
-            app:layout_constraintEnd_toStartOf="@id/iv_option"/>
-
-        <TextView
-            android:id="@+id/tv_folder_name"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="12dp"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="@color/teal_700"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_back"
-            app:layout_constraintEnd_toStartOf="@id/iv_search"
-            tools:text="asdasdasd"/>
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:titleTextColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_folder"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_folder_name"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -78,7 +33,7 @@
             android:layout_height="0dp"
             android:layout_margin="12dp"
             android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_folder_name"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

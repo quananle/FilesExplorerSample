@@ -3,6 +3,8 @@ package com.example.fileexplorersample.screen.home.fragment
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -35,12 +37,7 @@ class FolderFragment: Fragment() {
             arguments = bundleOf().apply {
                 putString(PARENT_PATH, parentPath)
             }
-
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -64,13 +61,19 @@ class FolderFragment: Fragment() {
     }
 
     private fun setup() {
-        if (parentFragmentManager.backStackEntryCount > 1) {
-            binding.tvFolderName.text = path?.substringAfterLast("/")
-            binding.ivBack.visibility = View.VISIBLE
-        } else {
-            binding.tvFolderName.text = "External Storage"
-            binding.ivBack.visibility = View.GONE
+        if (activity is AppCompatActivity)
+            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
+        binding.toolbar.apply {
+            if (parentFragmentManager.backStackEntryCount > 1) {
+                title = path?.substringAfterLast("/")
+                navigationIcon?.setVisible(true, false)
+            } else {
+                title = "External Storage"
+                navigationIcon?.setVisible(false, false)
+            }
         }
+
 
         folderAdapter = FolderAdapter(requireActivity())
         folderAdapter.listener = object : FolderListener {
@@ -96,7 +99,7 @@ class FolderFragment: Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        WTF("asd")
+        menu.clear()
         inflater.inflate(R.menu.file_option, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -112,7 +115,9 @@ class FolderFragment: Fragment() {
     }
 
     private fun setupAction() {
-
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 
     private fun  loadFiles() {
