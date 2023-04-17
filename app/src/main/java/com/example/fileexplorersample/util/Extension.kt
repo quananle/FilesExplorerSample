@@ -10,7 +10,7 @@ fun WTF(msg: String) {
 }
 
 inline fun <reified T : FragmentActivity> T?.pushFragment
-            (
+(
     fragment : Fragment,
     container : Int = R.id.container
 )

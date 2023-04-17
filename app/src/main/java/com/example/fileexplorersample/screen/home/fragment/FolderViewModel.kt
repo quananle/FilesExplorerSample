@@ -16,7 +16,7 @@ class FolderViewModel(private val fileRepository: FileRepository) : BaseViewMode
     val file: LiveData<List<File>> get() = _files
 
     fun getFiles(path: String = "") {
-        WTF("asd")
+        WTF(path)
         viewModelScope.launch {
             _files.postValue(fileRepository.getFiles(path))
         }

@@ -4,7 +4,10 @@ import android.os.Environment
 import android.provider.SyncStateContract.Constants
 import com.example.fileexplorersample.common.FileIdentify
 import java.io.File
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.log10
+import kotlin.math.pow
 
 fun getFile(filePath: String) : File = File(
     Environment.getExternalStorageDirectory(),
@@ -43,5 +46,15 @@ fun File.isAudio(): Boolean = FileIdentify.audioExtensions.any {
 }
 
 fun File.isAPK(): Boolean = this.absolutePath.trim().endsWith(".apk")
+
+fun Long.formatFileSize(): String {
+    if (this <= 0) {
+        return "0 B"
+    }
+
+    val units = arrayOf("B", "kB", "MB", "GB", "TB")
+    val digitGroups = (log10(toDouble()) / log10(1024.0)).toInt()
+    return "${DecimalFormat("#,##0.#").format(this / 1024.0.pow(digitGroups.toDouble()))} ${units[digitGroups]}"
+}
 
 

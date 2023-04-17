@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_200_alpha05">#80BB86FC</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,4 +9,20 @@
     <color name="gray">#717171</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="violet">#9C27B0</color>
+    <color name="violet_alpha05">#809C27B0</color>
+
+    <color name="orange">#F44336</color>
+    <color name="orange_alpha05">#80F44336</color>
+
+    <color name="green">#4CAF50</color>
+    <color name="green_alpha05">#804CAF50</color>
+
+    <color name="blue">#03A9F4</color>
+    <color name="blue_alpha05">#802196F3</color>
+
+    <color name="yellow">#FFEB3B</color>
+    <color name="yellow_alpha05">#80FFEB3B</color>
 </resources>

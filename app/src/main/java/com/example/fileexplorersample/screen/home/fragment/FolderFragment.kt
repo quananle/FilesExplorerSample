@@ -81,21 +81,17 @@ class FolderFragment: Fragment() {
         } ?: run {
             viewModel.getFiles()
         }
-
     }
 
     private fun setup() {
         if (activity is AppCompatActivity)
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
-        binding.toolbar.apply {
-            if (parentFragmentManager.backStackEntryCount > 1) {
-                title = path?.substringAfterLast("/")
-                navigationIcon?.setVisible(true, false)
-            } else {
-                title = "External Storage"
-                navigationIcon?.setVisible(false, false)
-            }
+        binding.toolbar.title = path?.let {
+            if (it.isNotEmpty())
+                it.substringAfterLast("/")
+            else
+                "External Storage"
         }
 
 
@@ -137,10 +133,7 @@ class FolderFragment: Fragment() {
 
     private fun setupAction() {
         binding.toolbar.setNavigationOnClickListener {
-            if (parentFragmentManager.backStackEntryCount > 1)
-                activity?.supportFragmentManager?.popBackStack()
-            else
-                activity?.finish()
+            activity?.onBackPressed()
         }
 
         binding.emptyView.setOnClickListener {

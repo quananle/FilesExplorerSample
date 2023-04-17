@@ -60,7 +60,7 @@
                 app:layout_constraintStart_toStartOf="@id/iv_empty"
                 app:layout_constraintEnd_toEndOf="@id/iv_empty"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:text="NO FILES FOUND"/>
+                android:text="@string/folder_no_file_found"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
