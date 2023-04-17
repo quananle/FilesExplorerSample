@@ -7,6 +7,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -57,10 +59,11 @@ class FolderFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.option_sort_by_name -> viewModel.sortFilesByDate()
+            R.id.option_sort_by_name -> viewModel.sortFilesByName()
             R.id.option_sort_by_type -> viewModel.filterFilesByType()
             R.id.option_sort_by_date -> viewModel.sortFilesByDate()
             R.id.option_sort_by_size -> viewModel.sortFilesBySize()
+            R.id.option_search -> openSearch()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -93,7 +96,6 @@ class FolderFragment: Fragment() {
             else
                 "External Storage"
         }
-
 
         folderAdapter = FolderAdapter(requireActivity())
         folderAdapter.listener = object : FolderListener {
@@ -144,6 +146,12 @@ class FolderFragment: Fragment() {
     private fun setupObserver() {
         viewModel.file.observe(viewLifecycleOwner) {
             it?.let {
+                viewModel.setFilesFiltered(it)
+            }
+        }
+
+        viewModel.filteredFiles.observe(viewLifecycleOwner) {
+            it?.let {
                 if(it.isNotEmpty()) {
                     folderAdapter.submitList(it)
                     binding.rvFolder.visibility = View.VISIBLE
@@ -157,5 +165,19 @@ class FolderFragment: Fragment() {
                 binding.emptyView.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun openSearch() {
+        if (binding.etSearch.isVisible) {
+            binding.etSearch.visibility = View.GONE
+        }else
+            binding.etSearch.visibility = View.VISIBLE
+
+        binding.etSearch.addTextChangedListener {
+            it?.let { searchKeyword ->
+                viewModel.onSearch(searchKeyword.toString())
+            }
+        }
+
     }
 }
