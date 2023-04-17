@@ -2,7 +2,9 @@ package com.example.fileexplorersample.data.repository
 
 import android.os.Environment
 import android.view.View
+import com.example.fileexplorersample.Application
 import com.example.fileexplorersample.util.WTF
+import com.example.fileexplorersample.util.getExternalPath
 import com.example.fileexplorersample.util.getFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,11 +21,14 @@ class FileRepository {
                 File(path)
             }
             else {
-                File(Environment.getExternalStorageDirectory().absolutePath)
+                File(getExternalPath())
             }
+
+        WTF(parent.absolutePath)
 
         if (parent.exists()) {
             val rootFiles = parent.listFiles()
+
             rootFiles?.let {
                 if (it.isNotEmpty())
                     files.addAll(rootFiles)

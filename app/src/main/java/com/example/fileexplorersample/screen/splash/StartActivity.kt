@@ -31,7 +31,7 @@ class StartActivity : AppCompatActivity() {
     private fun navigateToHome() {
         Intent(this@StartActivity, HomeActivity::class.java).apply {
             startActivity(this)
+            this@StartActivity.finish()
         }
-        finish()
     }
 }

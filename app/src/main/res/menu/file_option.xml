@@ -12,20 +12,24 @@
     <item
         android:id="@+id/option_sort_by_name"
         android:title="Name"
+        android:icon="@drawable/ic_check"
         app:showAsAction="never"/>
     <item
         android:id="@+id/option_sort_by_date"
         android:title="Date"
+        android:icon="@drawable/ic_check"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/option_sort_by_type"
         android:title="Type"
+        android:icon="@drawable/ic_check"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/option_sort_by_size"
         android:title="Size"
+        android:icon="@drawable/ic_check"
         app:showAsAction="never"/>
 
 </menu>

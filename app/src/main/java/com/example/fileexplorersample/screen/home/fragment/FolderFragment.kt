@@ -1,10 +1,11 @@
 package com.example.fileexplorersample.screen.home.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,7 +17,6 @@ import com.example.fileexplorersample.data.repository.FileRepository
 import com.example.fileexplorersample.databinding.FragmentFolderBinding
 import com.example.fileexplorersample.screen.home.adapter.FolderAdapter
 import com.example.fileexplorersample.screen.home.adapter.FolderListener
-import com.example.fileexplorersample.util.WTF
 import com.example.fileexplorersample.util.pushFragment
 import java.io.File
 
@@ -32,7 +32,6 @@ class FolderFragment: Fragment() {
 
     companion object {
         const val PARENT_PATH = "PARENT_PATH"
-
         fun instance(parentPath: String) : FolderFragment = FolderFragment().apply {
             arguments = bundleOf().apply {
                 putString(PARENT_PATH, parentPath)
@@ -50,6 +49,22 @@ class FolderFragment: Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.file_option, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.option_sort_by_name -> viewModel.sortFilesByDate()
+            R.id.option_sort_by_type -> viewModel.filterFilesByType()
+            R.id.option_sort_by_date -> viewModel.sortFilesByDate()
+            R.id.option_sort_by_size -> viewModel.sortFilesBySize()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModelFactory = FolderViewModelFactory(fileRepository = FileRepository())
@@ -58,6 +73,15 @@ class FolderFragment: Fragment() {
         setup()
         setupAction()
         setupObserver()
+    }
+
+    private fun  loadFiles() {
+        path?.let {filePath ->
+            viewModel.getFiles(filePath)
+        } ?: run {
+            viewModel.getFiles()
+        }
+
     }
 
     private fun setup() {
@@ -77,7 +101,7 @@ class FolderFragment: Fragment() {
 
         folderAdapter = FolderAdapter(requireActivity())
         folderAdapter.listener = object : FolderListener {
-            override fun onClick(position: Int) {
+            override fun onClick(position: Int, mimeType: String) {
                 val path = viewModel.file.value?.get(position)?.absolutePath
                 path?.let {
                     if (File(it).exists() && File(it).isDirectory) {
@@ -87,7 +111,20 @@ class FolderFragment: Fragment() {
                             )
                         )
                     } else {
-                        Toast.makeText(requireContext(), "Handling Open File", Toast.LENGTH_SHORT).show()
+                        try {
+                            Intent().apply {
+                                action = Intent.ACTION_VIEW
+                                setDataAndType(Uri.parse(it), mimeType)
+                                startActivity(this)
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                requireActivity(),
+                                "Cannot open the file",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
                     }
                 }
             }
@@ -98,35 +135,17 @@ class FolderFragment: Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.file_option, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.option_sort_by_name -> Unit
-            R.id.option_sort_by_type -> Unit
-            R.id.option_sort_by_date -> Unit
-            R.id.option_sort_by_size -> Unit
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun setupAction() {
         binding.toolbar.setNavigationOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
+            if (parentFragmentManager.backStackEntryCount > 1)
+                activity?.supportFragmentManager?.popBackStack()
+            else
+                activity?.finish()
         }
-    }
 
-    private fun  loadFiles() {
-        path?.let {filePath ->
-            viewModel.getFiles(filePath)
-        } ?: run {
+        binding.emptyView.setOnClickListener {
             viewModel.getFiles()
         }
-
     }
 
     private fun setupObserver() {

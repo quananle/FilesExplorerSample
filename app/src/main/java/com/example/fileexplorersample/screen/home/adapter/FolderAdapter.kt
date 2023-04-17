@@ -49,6 +49,7 @@ class FolderAdapter(
     class ViewHolder private constructor(private val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(context: Context ,item: File, position: Int, listener: FolderListener?) {
+            var mimeType = "*/*"
             if (item.exists()) {
                 binding.apply {
                     tvFolderName.text = item.name
@@ -60,8 +61,9 @@ class FolderAdapter(
                             tvFolderChild.text = "${item.list()?.size ?: "0"} item"
                         }
                         item.isPhoto() -> {
+                            tvFolderChild.visibility = View.GONE
                             val options = RequestOptions()
-                                .format(DecodeFormat.PREFER_ARGB_8888)
+                                .format(DecodeFormat.DEFAULT)
                                 .skipMemoryCache(true)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .fitCenter()
@@ -70,23 +72,20 @@ class FolderAdapter(
                                 .asDrawable()
                                 .load(item.path)
                                 .apply(options)
-                                .centerCrop()
+                                .circleCrop()
                                 .into(binding.ivFolderImg)
-
-
-//                            Glide
-//                                .with(context)
-//                                .load(item.absoluteFile.absolutePath)
-//                                .circleCrop()
-//                                .into(binding.ivFolderImg)
+                            mimeType = "image/*"
                         }
                         item.isMedia() -> {
+                            tvFolderChild.visibility = View.GONE
                             ivFolderImg.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.ic_launcher))
                         }
                         item.isAPK() -> {
-                            ivFolderImg.setImageDrawable(ContextCompat.getDrawable(context, com.bumptech.glide.R.drawable.abc_btn_check_material_anim))
+                            tvFolderChild.visibility = View.GONE
+                            ivFolderImg.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.ic_launcher))
                         }
                         else -> {
+                            tvFolderChild.visibility = View.GONE
                             ivFolderImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_file))
                         }
                     }
@@ -95,7 +94,7 @@ class FolderAdapter(
             }
 
             binding.root.setOnClickListener {
-                listener?.onClick(position)
+                listener?.onClick(position, mimeType)
             }
             binding.executePendingBindings()
         }
@@ -111,5 +110,5 @@ class FolderAdapter(
 }
 
 interface FolderListener {
-    fun onClick(position: Int)
+    fun onClick(position: Int, mimeType: String)
 }
