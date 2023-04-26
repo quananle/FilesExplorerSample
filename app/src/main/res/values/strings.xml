@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">FileExplorerSample</string>
+
+    <!--Home-->
+    <string name="home_images_label">Images</string>
+    <string name="home_videos_label">Videos</string>
+    <string name="home_audios_label">Audios</string>
+    <string name="home_documents_label">Documents</string>
+    <string name="home_others_label">Others</string>
+    <string name="home_storage_free_label">%s free</string>
+    <string name="home_total_storage_label">Total storage: %s</string>
+
+
+    <!--Folder Fragment-->
+    <string name="folder_no_file_found">NO FILES FOUND</string>
 </resources>
